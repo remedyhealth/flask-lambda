@@ -8,14 +8,15 @@ https://github.com/techjacker/flask-lambda
 
 Improvements:
 
-    * Expose original input event from AWS on Flask's request object
-    * Production-grade logging
+* Expose original input event from AWS on Flask's request object
+* Production-grade logging
 
 
 Requirements
 ------------
 
-    * Python 3.6+
+* Python 3.6+
+* Flask 0.10+
 
 
 Installation
@@ -31,13 +32,13 @@ Here is an example of what a Flask app using this library would look like::
 
 .. code-block:: python
 
-   from flask_lambda import FlaskLambda
+    from flask_lambda import FlaskLambda
 
-   app = FlaskLambda(__name__)
+    app = FlaskLambda(__name__)
 
 
-   @app.route('/foo', methods=['GET', 'POST'])
-   def foo():
+    @app.route('/foo', methods=['GET', 'POST'])
+    def foo():
        data = {
            'form': request.form.copy(),
            'args': request.args.copy(),
@@ -50,13 +51,13 @@ Here is an example of what a Flask app using this library would look like::
        )
 
 
-   if __name__ == '__main__':
+    if __name__ == '__main__':
         app.run(debug=True)
 
 You can access the original input event on Flask application context::
 
 .. code-block:: python
 
-   from flask import request
+    from flask import request
 
-   assert request.aws_event['input']['httpMethod'] == 'POST'
+    assert request.aws_event['input']['httpMethod'] == 'POST'
