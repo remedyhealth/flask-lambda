@@ -1,45 +1,62 @@
-flask-lambda-python3.6
-============
+flask-lambda-support
+====================
 
-**Python 3.6+ Only**
----------------
+Write Flask applications that support being run in in AWS Lambda behind API Gateway.
 
-For older versions of python use the original flask-lambda library which this code is adapted from:
-https://github.com/sivel/flask-lambda
+This project was forked from:
+https://github.com/techjacker/flask-lambda
 
-See this example flask project for how to use and deploy a flask app using this library:
-https://github.com/techjacker/flask-lambda-example
+Improvements:
+
+    * Expose original input event from AWS on Flask's request object
+    * Production-grade logging
+
+
+Requirements
+------------
+
+    * Python 3.6+
 
 
 Installation
 ------------
 
-pip install flask-lambda-python36
+``pip install flask-lambda-support``
 
 
 Usage
 -----
 
-Here is an example of what ``my_python_file.py`` would look like::
+Here is an example of what a Flask app using this library would look like::
 
-    from flask_lambda import FlaskLambda
+.. code-block:: python
 
-    app = FlaskLambda(__name__)
+   from flask_lambda import FlaskLambda
 
-
-    @app.route('/foo', methods=['GET', 'POST'])
-    def foo():
-        data = {
-            'form': request.form.copy(),
-            'args': request.args.copy(),
-            'json': request.json
-        }
-        return (
-            json.dumps(data, indent=4, sort_keys=True),
-            200,
-            {'Content-Type': 'application/json'}
-        )
+   app = FlaskLambda(__name__)
 
 
-    if __name__ == '__main__':
+   @app.route('/foo', methods=['GET', 'POST'])
+   def foo():
+       data = {
+           'form': request.form.copy(),
+           'args': request.args.copy(),
+           'json': request.json
+       }
+       return (
+           json.dumps(data, indent=4, sort_keys=True),
+           200,
+           {'Content-Type': 'application/json'}
+       )
+
+
+   if __name__ == '__main__':
         app.run(debug=True)
+
+You can access the original input event on Flask application context::
+
+.. code-block:: python
+
+   from flask import request
+
+   assert request.aws_event['input']['httpMethod'] == 'POST'
