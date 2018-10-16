@@ -54,7 +54,7 @@ Here is an example of what a Flask app using this library would look like:
     if __name__ == '__main__':
         app.run(debug=True)
 
-You can access the original input event on Flask application context:
+You can access the original input event on the Flask request context:
 
 .. code-block:: python
 
