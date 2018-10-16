@@ -79,12 +79,21 @@ def make_environ(event):
     environ['wsgi.run_once'] = True
     environ['wsgi.multiprocess'] = False
 
+    # store AWS input event in WSGI environment
+    environ['aws.event'] = event
+
     BaseRequest(environ)
 
     return environ
 
 
-class LambdaResponse(object):
+class LambdaRequest(BaseRequest):
+    @property
+    def aws_event(self):
+        return self.environ.get('aws.event')
+
+
+class LambdaResponse:
 
     def __init__(self):
         self.status = None
@@ -96,6 +105,7 @@ class LambdaResponse(object):
 
 
 class FlaskLambda(Flask):
+    request_class = LambdaRequest
 
     def __call__(self, event, context):
         try:
