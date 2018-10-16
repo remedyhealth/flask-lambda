@@ -28,7 +28,7 @@ Installation
 Usage
 -----
 
-Here is an example of what a Flask app using this library would look like::
+Here is an example of what a Flask app using this library would look like:
 
 .. code-block:: python
 
@@ -54,7 +54,7 @@ Here is an example of what a Flask app using this library would look like::
     if __name__ == '__main__':
         app.run(debug=True)
 
-You can access the original input event on Flask application context::
+You can access the original input event on Flask application context:
 
 .. code-block:: python
 
