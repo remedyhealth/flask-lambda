@@ -31,7 +31,7 @@ except ImportError:
     except ImportError:
         from io import StringIO
 
-from werkzeug.wrappers import BaseRequest
+from flask import Request
 
 
 __version__ = '0.1.0'
@@ -81,12 +81,10 @@ def make_environ(event):
     # store AWS input event in WSGI environment
     environ['aws.event'] = event
 
-    BaseRequest(environ)
-
     return environ
 
 
-class LambdaRequest(BaseRequest):
+class LambdaRequest(Request):
     @property
     def aws_event(self):
         return self.environ.get('aws.event')
