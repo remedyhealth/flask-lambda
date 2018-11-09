@@ -54,10 +54,11 @@ Here is an example of what a Flask app using this library would look like:
     if __name__ == '__main__':
         app.run(debug=True)
 
-You can access the original input event on the Flask request context:
+You can access the original input event and context on the Flask request context:
 
 .. code-block:: python
 
     from flask import request
 
     assert request.aws_event['input']['httpMethod'] == 'POST'
+    assert request.aws_context.get_remaining_time_in_millis() == 10_000

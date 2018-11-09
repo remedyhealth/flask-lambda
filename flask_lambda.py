@@ -34,10 +34,10 @@ except ImportError:
 from flask import Request
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 
-def make_environ(event):
+def make_environ(event, context):
     environ = {}
     # key might be there but set to None
     headers = event.get('headers', {}) or {}
@@ -78,8 +78,9 @@ def make_environ(event):
     environ['wsgi.run_once'] = True
     environ['wsgi.multiprocess'] = False
 
-    # store AWS input event in WSGI environment
+    # store AWS input event and context in WSGI environment
     environ['aws.event'] = event
+    environ['aws.context'] = context
 
     return environ
 
@@ -88,6 +89,10 @@ class LambdaRequest(Request):
     @property
     def aws_event(self):
         return self.environ.get('aws.event')
+
+    @property
+    def aws_context(self):
+        return self.environ.get('aws.context')
 
 
 class LambdaResponse:
@@ -119,7 +124,7 @@ class FlaskLambda(Flask):
             response = LambdaResponse()
 
             body = next(self.wsgi_app(
-                make_environ(event),
+                make_environ(event, context),
                 response.start_response
             ))
 
