@@ -119,7 +119,7 @@ class FlaskLambda(Flask):
                 return super(FlaskLambda, self).__call__(event, context)
 
             self.logger.debug('Called with AWS Lambda input event')
-            self.logger.debug('Event: ', event)
+            self.logger.debug('Event: %r', event)
 
             response = LambdaResponse()
 
@@ -134,8 +134,8 @@ class FlaskLambda(Flask):
                 'body': body.decode('utf-8')
             }
 
-        except Exception as e:
-            self.logger.error('An unexpected exception occured: ', e)
+        except:
+            self.logger.exception('An unexpected exception occured')
 
             return {
                 'statusCode': 500,
