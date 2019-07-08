@@ -32,6 +32,7 @@ except ImportError:
         from io import StringIO
 
 from flask import Request
+from util import get_nested
 
 
 __version__ = '0.1.2'
@@ -50,12 +51,12 @@ def make_environ(event, context):
         http_hdr_name = 'HTTP_{}'.format(hdr_name)
         environ[http_hdr_name] = hdr_value
 
-    qs = event['queryStringParameters']
+    qs = event.get('queryStringParameters', '')
 
-    environ['REQUEST_METHOD'] = event['httpMethod']
-    environ['PATH_INFO'] = event['path']
+    environ['REQUEST_METHOD'] = event.get('httpMethod', '')
+    environ['PATH_INFO'] = event.get('path', '')
     environ['QUERY_STRING'] = urlencode(qs) if qs else ''
-    environ['REMOTE_ADDR'] = event['requestContext']['identity']['sourceIp']
+    environ['REMOTE_ADDR'] = get_nested(event, '', 'requestContext', 'identity', 'sourceIp')
     environ['HOST'] = '{}:{}'.format(
         environ.get('HTTP_HOST', ''),
         environ.get('HTTP_X_FORWARDED_PORT', ''),
@@ -63,15 +64,15 @@ def make_environ(event, context):
     environ['SCRIPT_NAME'] = ''
     environ['SERVER_NAME'] = 'SERVER_NAME'
 
-    environ['SERVER_PORT'] = environ['HTTP_X_FORWARDED_PORT']
+    environ['SERVER_PORT'] = environ.get('HTTP_X_FORWARDED_PORT', '')
     environ['SERVER_PROTOCOL'] = 'HTTP/1.1'
 
     environ['CONTENT_LENGTH'] = str(
-        len(event['body']) if event['body'] else ''
+        len(event.get('body', ''))
     )
 
-    environ['wsgi.url_scheme'] = environ['HTTP_X_FORWARDED_PROTO']
-    environ['wsgi.input'] = StringIO(event['body'] or '')
+    environ['wsgi.url_scheme'] = environ.get('HTTP_X_FORWARDED_PROTO', '')
+    environ['wsgi.input'] = StringIO(event.get('body', ''))
     environ['wsgi.version'] = (1, 0)
     environ['wsgi.errors'] = sys.stderr
     environ['wsgi.multithread'] = False
@@ -140,5 +141,5 @@ class FlaskLambda(Flask):
             return {
                 'statusCode': 500,
                 'headers': {},
-                'body': 'internal server error'
+                'body': 'Internal Server Error'
             }
