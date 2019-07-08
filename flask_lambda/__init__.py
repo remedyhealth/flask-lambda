@@ -68,7 +68,7 @@ def make_environ(event, context):
     environ['SERVER_PROTOCOL'] = 'HTTP/1.1'
 
     environ['CONTENT_LENGTH'] = str(
-        len(event['body']) if event['body'] else ''
+        len(event['body']) if 'body' in event and event['body'] else 0
     )
 
     environ['wsgi.url_scheme'] = environ.get('HTTP_X_FORWARDED_PROTO', '')

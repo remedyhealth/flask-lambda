@@ -62,3 +62,15 @@ You can access the original input event and context on the Flask request context
 
     assert request.aws_event['input']['httpMethod'] == 'POST'
     assert request.aws_context.get_remaining_time_in_millis() == 10_000
+
+Development
+-----------
+
+You can publish a new version to PyPI with the following commands:
+
+.. code-block:: bash
+
+    python3 setup.py sdist bdist_wheel
+    twine upload PATH_TO_WHL_FILE
+
+[Refer to the official documentation on Python packaging for more information](https://packaging.python.org/tutorials/packaging-projects)
