@@ -32,7 +32,7 @@ except ImportError:
         from io import StringIO
 
 from flask import Request
-from util import get_nested
+from flask_lambda.util import get_nested
 
 
 __version__ = '0.1.2'

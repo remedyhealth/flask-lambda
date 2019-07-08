@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 with open('README.rst') as f:
@@ -6,7 +6,7 @@ with open('README.rst') as f:
 
 setup(
     name='flask-lambda-support',
-    version='0.1.2',
+    version='0.1.4',
     description='Python 3.6+ module to make Flask compatible with AWS Lambda',
     long_description=long_description,
     keywords='flask aws amazon lambda',
@@ -14,6 +14,7 @@ setup(
     author_email='jochen.vandevelde@cloudway.be',
     url='https://github.com/becloudway/flask-lambda',
     license='Apache License, Version 2.0',
+    packages=find_packages(),
     py_modules=['flask_lambda'],
     install_requires=['Flask>=0.10'],
     classifiers=[
