@@ -68,11 +68,11 @@ def make_environ(event, context):
     environ['SERVER_PROTOCOL'] = 'HTTP/1.1'
 
     environ['CONTENT_LENGTH'] = str(
-        len(event.get('body', ''))
+        len(event['body']) if event['body'] else ''
     )
 
     environ['wsgi.url_scheme'] = environ.get('HTTP_X_FORWARDED_PROTO', '')
-    environ['wsgi.input'] = StringIO(event.get('body', ''))
+    environ['wsgi.input'] = StringIO(event['body'] or '')
     environ['wsgi.version'] = (1, 0)
     environ['wsgi.errors'] = sys.stderr
     environ['wsgi.multithread'] = False
