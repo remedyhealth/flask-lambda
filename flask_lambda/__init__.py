@@ -23,13 +23,7 @@ except ImportError:
 
 from flask import Flask
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    try:
-        from StringIO import StringIO
-    except ImportError:
-        from io import StringIO
+import io
 
 from flask import Request
 from flask_lambda.util import get_nested
@@ -72,7 +66,7 @@ def make_environ(event, context):
     )
 
     environ['wsgi.url_scheme'] = environ.get('HTTP_X_FORWARDED_PROTO', '')
-    environ['wsgi.input'] = StringIO(event['body'] or '')
+    environ['wsgi.input'] = io.BytesIO((event['body'] or '').encode())
     environ['wsgi.version'] = (1, 0)
     environ['wsgi.errors'] = sys.stderr
     environ['wsgi.multithread'] = False
